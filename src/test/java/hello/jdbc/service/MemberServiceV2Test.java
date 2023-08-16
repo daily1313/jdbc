@@ -1,11 +1,14 @@
 package hello.jdbc.service;
 
-import static hello.jdbc.connection.ConnectionConst.*;
+import static hello.jdbc.connection.ConnectionConst.PASSWORD;
+import static hello.jdbc.connection.ConnectionConst.URL;
+import static hello.jdbc.connection.ConnectionConst.USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import hello.jdbc.domain.Member;
 import hello.jdbc.repository.MemberRepositoryV1;
+import hello.jdbc.repository.MemberRepositoryV2;
 import java.sql.SQLException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,20 +17,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 
-class MemberServiceV1Test {
+class MemberServiceV2Test {
 
     public static final String MEMBER_A = "memberA";
     public static final String MEMBER_B = "memberB";
     public static final String MEMBER_EX = "ex";
 
-    private MemberRepositoryV1 memberRepository;
-    private MemberServiceV1 memberService;
+    private MemberRepositoryV2 memberRepository;
+    private MemberServiceV2 memberService;
 
     @BeforeEach
     void before() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
-        memberRepository = new MemberRepositoryV1(dataSource);
-        memberService = new MemberServiceV1(memberRepository);
+        memberRepository = new MemberRepositoryV2(dataSource);
+        memberService = new MemberServiceV2(dataSource, memberRepository);
     }
 
     @AfterEach
@@ -73,7 +76,7 @@ class MemberServiceV1Test {
         //then
         Member findMemberA = memberRepository.findById(memberA.getMemberId());
         Member findMemberB = memberRepository.findById(memberEx.getMemberId());
-        assertThat(findMemberA.getMoney()).isEqualTo(8000);
+        assertThat(findMemberA.getMoney()).isEqualTo(10000);
         assertThat(findMemberB.getMoney()).isEqualTo(10000);
     }
 }
