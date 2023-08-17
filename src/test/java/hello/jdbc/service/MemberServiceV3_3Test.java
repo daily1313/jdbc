@@ -11,10 +11,12 @@ import hello.jdbc.repository.MemberRepositoryV3;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -70,6 +72,8 @@ class MemberServiceV3_3Test {
     void AopCheck() {
         log.info("memberService class={}", memberService.getClass());
         log.info("memberRepository class={}", memberRepository.getClass());
+        assertThat(AopUtils.isAopProxy(memberService)).isTrue();
+        assertThat(AopUtils.isAopProxy(memberRepository)).isFalse();
     }
 
     @Test
